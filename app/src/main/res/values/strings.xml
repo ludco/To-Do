@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ToDoCompose</string>
+    <string name="check">check</string>
+    <string name="all_done">All done !</string>
+    <string name="task_name">Task name</string>
+    <string name="edit">Edit</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_ok">OK</string>
+    <string name="add_a_task">Add a task</string>
+    <string name="delete">Delete</string>
+</resources>
