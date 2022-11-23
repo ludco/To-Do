@@ -22,7 +22,7 @@ import com.app.todocompose.domain.task.Task
 import com.app.todocompose.ui.components.TaskItem
 
 @Composable
-fun HomeScreen(tasksList: List<Task>, onDeleteTask: (Task) -> Unit) {
+fun HomeScreen(tasksList: List<Task>, onDeleteTask: (Long) -> Unit) {
     if (tasksList.size == 0) {
         AllDoneScreen()
     } else {
@@ -33,7 +33,7 @@ fun HomeScreen(tasksList: List<Task>, onDeleteTask: (Task) -> Unit) {
 @Composable
 fun TasksListScreen(
     tasksList: List<Task>,
-    onDeleteTask: (Task) -> Unit,
+    onDeleteTask: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {

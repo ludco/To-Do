@@ -7,13 +7,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.ViewModel
+import androidx.compose.ui.platform.testTag
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.app.todocompose.domain.task.Task
 import com.app.todocompose.ui.components.AddTaskDialog
 import com.app.todocompose.ui.screens.HomeScreen
 import com.app.todocompose.ui.viewmodels.TaskViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.app.todocompose.domain.task.Task
 
 @Composable
 fun ToDoAppBarr() {
@@ -29,19 +30,24 @@ fun ToDoAppBarr() {
 fun ToDoApp(taskViewModel: TaskViewModel = viewModel()) {
     var showDialog by remember { mutableStateOf(false) }
 
+    val tasksList by taskViewModel.tasks.collectAsState(initial = listOf())
+    Log.d("TEST", tasksList.toString())
+
     fun addNewTask(taskName: String) {
-        Log.d("TEST", "ici")
         val task = Task(name = taskName)
         taskViewModel.addTask(task)
         showDialog = false
     }
 
-    fun deleteTask(task: Task) {
-        taskViewModel.removeTask(task)
+    fun deleteTask(taskId: Long) {
+        taskViewModel.removeTask(taskId)
     }
 
     Scaffold(topBar = { ToDoAppBarr() }, floatingActionButton = {
-        FloatingActionButton(onClick = { showDialog = true }) {
+        FloatingActionButton(
+            onClick = { showDialog = true },
+            modifier = Modifier.testTag("test-FAB")
+        ) {
             Icon(Icons.Filled.Add, "Add", tint = Color.White)
         }
     }) {
@@ -50,7 +56,9 @@ fun ToDoApp(taskViewModel: TaskViewModel = viewModel()) {
                 onOKClick = { taskName -> addNewTask(taskName) },
                 onCancelClick = { showDialog = false })
         }
-        HomeScreen(taskViewModel.tasks, onDeleteTask = { task -> deleteTask(task) })
+        HomeScreen(
+            tasksList,
+            onDeleteTask = { taskId -> deleteTask(taskId) })
     }
 }
 

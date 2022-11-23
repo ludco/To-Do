@@ -18,7 +18,7 @@ import com.app.todocompose.R
 import com.app.todocompose.domain.task.Task
 
 @Composable
-fun TaskItem(task: Task, onDeleteTask: (Task) -> Unit, modifier: Modifier = Modifier) {
+fun TaskItem(task: Task, onDeleteTask: (Long) -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier
             .fillMaxWidth()
@@ -29,7 +29,7 @@ fun TaskItem(task: Task, onDeleteTask: (Task) -> Unit, modifier: Modifier = Modi
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = task.name)
-        IconButton(onClick = { onDeleteTask(task) }) {
+        IconButton(onClick = { onDeleteTask(task.id) }) {
             Icon(
                 imageVector = Icons.Filled.Delete,
                 contentDescription = stringResource(R.string.delete)
