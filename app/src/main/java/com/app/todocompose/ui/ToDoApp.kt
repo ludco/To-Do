@@ -10,7 +10,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.res.stringResource
+import com.app.todocompose.R
 import com.app.todocompose.domain.project.Project
 import com.app.todocompose.domain.task.Task
 import com.app.todocompose.ui.components.AddTaskDialog
@@ -19,9 +20,9 @@ import com.app.todocompose.ui.viewmodels.ProjectViewModel
 import com.app.todocompose.ui.viewmodels.TaskViewModel
 
 @Composable
-fun ToDoAppBarr() {
-    TopAppBar(title = { Text("ToDo") }, actions = {
-        IconButton(onClick = { /*TODO*/ }) {
+fun ToDoAppBarr(changeProjectMode: () -> Unit) {
+    TopAppBar(title = { Text(stringResource(R.string.todo)) }, actions = {
+        IconButton(onClick = changeProjectMode) {
             Icon(imageVector = Icons.Filled.List, contentDescription = "list")
         }
     })
@@ -31,15 +32,13 @@ fun ToDoAppBarr() {
 @Composable
 fun ToDoApp(taskViewModel: TaskViewModel, projectViewModel: ProjectViewModel) {
     var showDialog by remember { mutableStateOf(false) }
+    var projectMode by remember { mutableStateOf(false) }
 
     val tasksList by taskViewModel.tasks.collectAsState(initial = listOf())
-    Log.d("TEST", tasksList.toString())
     val projectsList by projectViewModel.projects.collectAsState(initial = listOf())
-    Log.d("TEST", projectsList.toString())
 
-
-    fun addNewTask(taskName: String) {
-        val task = Task(name = taskName)
+    fun addNewTask(taskName: String, projectId: Long) {
+        val task = Task(name = taskName, projectId = projectId)
         taskViewModel.addTask(task)
         showDialog = false
     }
@@ -53,17 +52,19 @@ fun ToDoApp(taskViewModel: TaskViewModel, projectViewModel: ProjectViewModel) {
         taskViewModel.removeTask(taskId)
     }
 
-    Scaffold(topBar = { ToDoAppBarr() }, floatingActionButton = {
-        FloatingActionButton(
-            onClick = { showDialog = true },
-            modifier = Modifier.testTag("test-FAB")
-        ) {
-            Icon(Icons.Filled.Add, "Add", tint = Color.White)
-        }
-    }) {
+    Scaffold(
+        topBar = { ToDoAppBarr(changeProjectMode = { projectMode = !projectMode }) },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showDialog = true },
+                modifier = Modifier.testTag("test-FAB")
+            ) {
+                Icon(Icons.Filled.Add, "Add", tint = Color.White)
+            }
+        }) {
         if (showDialog) {
             AddTaskDialog(
-                onOKClick = { taskName -> addNewTask(taskName) },
+                onOKClick = { taskName, project -> addNewTask(taskName, project.id) },
                 onCancelClick = { showDialog = false },
                 onProjectCreated = { projectName -> projectNewTask(projectName) },
                 projectsList = projectsList
@@ -72,6 +73,8 @@ fun ToDoApp(taskViewModel: TaskViewModel, projectViewModel: ProjectViewModel) {
         }
         HomeScreen(
             tasksList,
+            projectsList,
+            projectMode,
             onDeleteTask = { taskId -> deleteTask(taskId) })
     }
 }

@@ -18,7 +18,7 @@ import com.app.todocompose.domain.project.Project
 
 @Composable
 fun AddTaskDialog(
-    onOKClick: (String) -> Unit,
+    onOKClick: (String, Project) -> Unit,
     onCancelClick: () -> Unit,
     onProjectCreated: (String) -> Unit,
     projectsList: List<Project>,
@@ -27,7 +27,7 @@ fun AddTaskDialog(
     ) {
     var showProjectDialaog by remember { mutableStateOf(false) }
     var taskName by remember { mutableStateOf("") }
-    var selectedProject by remember { mutableStateOf("") }
+    var selectedProject by remember { mutableStateOf(Project(0, "")) }
 
 
 
@@ -38,7 +38,7 @@ fun AddTaskDialog(
                 OutlineDropDown(
                     selectedProject = selectedProject,
                     projectList = projectsList,
-                    onChooseItem = { item -> selectedProject = item.name },
+                    onChooseItem = { item -> selectedProject = item },
                     onCreateNewProject = { showProjectDialaog = true },
                     modifier = Modifier
                 )
@@ -59,7 +59,9 @@ fun AddTaskDialog(
                         label = R.string.button_cancel,
                         onClick = onCancelClick
                     )
-                    TransparentButton(label = R.string.button_ok, onClick = { onOKClick(taskName) })
+                    TransparentButton(
+                        label = R.string.button_ok,
+                        onClick = { onOKClick(taskName, selectedProject) })
                 }
             }
         }

@@ -18,7 +18,7 @@ import com.app.todocompose.domain.project.Project
 
 @Composable
 fun OutlineDropDown(
-    selectedProject: String,
+    selectedProject: Project,
     projectList: List<Project>,
     onChooseItem: (Project) -> Unit,
     onCreateNewProject: () -> Unit,
@@ -30,7 +30,7 @@ fun OutlineDropDown(
     Row(Modifier.fillMaxWidth()) {
         Box() {
             OutlinedTextField(
-                value = selectedProject,
+                value = selectedProject.name,
                 onValueChange = { },
                 label = { Text(stringResource(R.string.project)) },
                 singleLine = true,

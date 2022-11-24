@@ -11,4 +11,5 @@
     <string name="add_a_task">Add a task</string>
     <string name="delete">Delete</string>
     <string name="create_project">Create a new project</string>
+    <string name="todo">ToDo</string>
 </resources>

@@ -18,27 +18,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.app.todocompose.R
+import com.app.todocompose.domain.project.Project
 import com.app.todocompose.domain.task.Task
+import com.app.todocompose.ui.components.ProjectItem
 import com.app.todocompose.ui.components.TaskItem
 
 @Composable
-fun HomeScreen(tasksList: List<Task>, onDeleteTask: (Long) -> Unit) {
-    if (tasksList.size == 0) {
+fun HomeScreen(
+    tasksList: List<Task>,
+    projectList: List<Project>,
+    projectMode: Boolean,
+    onDeleteTask: (Long) -> Unit
+) {
+    if (tasksList.isEmpty()) {
         AllDoneScreen()
     } else {
-        TasksListScreen(tasksList, onDeleteTask)
+        TasksListScreen(tasksList, projectList, onDeleteTask, projectMode)
     }
 }
 
 @Composable
 fun TasksListScreen(
     tasksList: List<Task>,
+    projectList: List<Project>,
     onDeleteTask: (Long) -> Unit,
+    projectMode: Boolean,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = modifier) {
-        items(tasksList, key = { task -> task.id }) { task ->
-            TaskItem(task, onDeleteTask)
+    if (projectMode) {
+        LazyColumn(modifier = modifier) {
+            items(projectList, key = { project -> project.id }) {project->
+                ProjectItem(project, tasksList, onDeleteTask)
+            }
+        }
+    } else {
+        LazyColumn(modifier = modifier) {
+            items(tasksList, key = { task -> task.id }) { task ->
+                TaskItem(task, onDeleteTask)
+            }
         }
     }
 }
