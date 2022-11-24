@@ -22,6 +22,10 @@ val Typography = Typography(
         fontSize = 24.sp,
         color = Color.Gray
     ),
+    caption = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontSize = 16.sp,
+    ),
     button = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,

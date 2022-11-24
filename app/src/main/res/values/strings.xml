@@ -3,6 +3,7 @@
     <string name="check">check</string>
     <string name="all_done">All done !</string>
     <string name="task_name">Task name</string>
+    <string name="project">Project</string>
     <string name="edit">Edit</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">OK</string>
