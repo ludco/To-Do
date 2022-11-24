@@ -14,38 +14,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.app.todocompose.R
-import com.app.todocompose.domain.project.Project
 
 @Composable
-fun AddTaskDialog(
+fun AddProjectDialog(
     onOKClick: (String) -> Unit,
     onCancelClick: () -> Unit,
-    onProjectCreated: (String) -> Unit,
-    projectsList: List<Project>,
-    modifier: Modifier = Modifier,
-
-    ) {
-    var showProjectDialaog by remember { mutableStateOf(false) }
-    var taskName by remember { mutableStateOf("") }
-    var selectedProject by remember { mutableStateOf("") }
-
-
+    modifier: Modifier = Modifier
+) {
+    var projectName by remember { mutableStateOf("") }
 
     Dialog(onDismissRequest = onCancelClick) {
         Box(modifier.background(Color.White)) {
             Column(modifier = Modifier.padding(40.dp)) {
-                Text(stringResource(R.string.add_a_task), modifier.padding(bottom = 8.dp))
-                OutlineDropDown(
-                    selectedProject = selectedProject,
-                    projectList = projectsList,
-                    onChooseItem = { item -> selectedProject = item.name },
-                    onCreateNewProject = { showProjectDialaog = true },
-                    modifier = Modifier
-                )
+                Text(stringResource(R.string.create_project), modifier.padding(bottom = 8.dp))
                 OutlinedTextField(
-                    value = taskName,
-                    onValueChange = { value -> taskName = value },
-                    label = { Text(stringResource(R.string.task_name)) },
+                    value = projectName,
+                    onValueChange = { value -> projectName = value },
+                    label = { Text(stringResource(R.string.project_name)) },
                     singleLine = true,
                     leadingIcon = {
                         Icon(
@@ -59,18 +44,11 @@ fun AddTaskDialog(
                         label = R.string.button_cancel,
                         onClick = onCancelClick
                     )
-                    TransparentButton(label = R.string.button_ok, onClick = { onOKClick(taskName) })
+                    TransparentButton(
+                        label = R.string.button_ok,
+                        onClick = { onOKClick(projectName) })
                 }
             }
         }
     }
-    if (showProjectDialaog) {
-        AddProjectDialog(
-            onOKClick = { projectname ->
-                onProjectCreated(projectname);
-                showProjectDialaog = false
-            },
-            onCancelClick = { showProjectDialaog = false })
-    }
 }
-

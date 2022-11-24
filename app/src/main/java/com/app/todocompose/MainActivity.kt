@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.app.todocompose.ui.ToDoApp
 import com.app.todocompose.ui.theme.ToDoComposeTheme
+import com.app.todocompose.ui.viewmodels.ProjectViewModel
 import com.app.todocompose.ui.viewmodels.TaskViewModel
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +23,10 @@ class MainActivity : ComponentActivity() {
             ToDoComposeTheme {
                 val taskViewModel: TaskViewModel =
                     viewModel(factory = TaskViewModel.Factory)
-                ToDoApp(taskViewModel)
+                val projectViewModel: ProjectViewModel =
+                    viewModel(factory = ProjectViewModel.Factory)
+
+                ToDoApp(taskViewModel, projectViewModel)
             }
         }
     }

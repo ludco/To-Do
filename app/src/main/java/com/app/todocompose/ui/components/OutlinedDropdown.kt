@@ -14,12 +14,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.app.todocompose.R
+import com.app.todocompose.domain.project.Project
 
 @Composable
 fun OutlineDropDown(
     selectedProject: String,
-    projectList: List<String>,
-    onChooseItem: (String) -> Unit,
+    projectList: List<Project>,
+    onChooseItem: (Project) -> Unit,
+    onCreateNewProject: () -> Unit,
     modifier: Modifier
 ) {
 
@@ -52,7 +54,7 @@ fun OutlineDropDown(
                     DropdownMenuItem(onClick = {
                         onChooseItem(item)
                         expanded = false
-                    }) { Text(text = item, style = MaterialTheme.typography.caption) }
+                    }) { Text(text = item.name, style = MaterialTheme.typography.caption) }
                 }
                 Spacer(
                     modifier = Modifier
@@ -61,7 +63,9 @@ fun OutlineDropDown(
                         .background(color = Color.Gray)
                 )
                 Row(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .clickable(onClick = onCreateNewProject),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
 
