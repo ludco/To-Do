@@ -1,5 +1,6 @@
 package com.app.todocompose.ui.components
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -27,8 +29,8 @@ fun AddTaskDialog(
     ) {
     var showProjectDialaog by remember { mutableStateOf(false) }
     var taskName by remember { mutableStateOf("") }
-    var selectedProject by remember { mutableStateOf(Project(0, "")) }
-
+    var selectedProject by remember { mutableStateOf(Project(id = 0, name = "")) }
+    val context = LocalContext.current
 
 
     Dialog(onDismissRequest = onCancelClick) {
@@ -61,7 +63,17 @@ fun AddTaskDialog(
                     )
                     TransparentButton(
                         label = R.string.button_ok,
-                        onClick = { onOKClick(taskName, selectedProject) })
+                        onClick = {
+                            if (selectedProject.name.isNotEmpty()) {
+                                onOKClick(taskName, selectedProject!!)
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Please choose a project !",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        })
                 }
             }
         }

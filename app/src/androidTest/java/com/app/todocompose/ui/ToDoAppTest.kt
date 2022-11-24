@@ -2,7 +2,9 @@ package com.app.todocompose.ui
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.app.todocompose.fake.FakeLocalProjectRepository
 import com.app.todocompose.fake.FakeLocalTaskRepository
+import com.app.todocompose.ui.viewmodels.ProjectViewModel
 import com.app.todocompose.ui.viewmodels.TaskViewModel
 import org.junit.Before
 import org.junit.Rule
@@ -16,7 +18,8 @@ class ToDoAppTest {
     fun setupFormScreen() {
         composeTestRule.setContent {
             val taskViewModel = TaskViewModel(taskRepository = FakeLocalTaskRepository())
-            ToDoApp(taskViewModel)
+            val projectViewModel = ProjectViewModel(projectRepository = FakeLocalProjectRepository())
+            ToDoApp(taskViewModel, projectViewModel)
         }
     }
 
