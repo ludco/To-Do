@@ -22,14 +22,14 @@ import com.app.todocompose.domain.project.Project
 fun AddTaskDialog(
     onOKClick: (String, Project) -> Unit,
     onCancelClick: () -> Unit,
-    onProjectCreated: (String) -> Unit,
+    onProjectCreated: (String, Color) -> Unit,
     projectsList: List<Project>,
     modifier: Modifier = Modifier,
 
     ) {
     var showProjectDialaog by remember { mutableStateOf(false) }
     var taskName by remember { mutableStateOf("") }
-    var selectedProject by remember { mutableStateOf(Project(id = 0, name = "")) }
+    var selectedProject by remember { mutableStateOf(Project(id = 0, name = "", color= 0)) }
     val context = LocalContext.current
 
 
@@ -80,8 +80,8 @@ fun AddTaskDialog(
     }
     if (showProjectDialaog) {
         AddProjectDialog(
-            onOKClick = { projectname ->
-                onProjectCreated(projectname);
+            onOKClick = { projectname, projectColor ->
+                onProjectCreated(projectname, projectColor);
                 showProjectDialaog = false
             },
             onCancelClick = { showProjectDialaog = false })

@@ -12,4 +12,5 @@
     <string name="delete">Delete</string>
     <string name="create_project">Create a new project</string>
     <string name="todo">ToDo</string>
+    <string name="whoops">Whoops... we were unable to get your tasks list</string>
 </resources>

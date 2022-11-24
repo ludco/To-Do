@@ -1,5 +1,6 @@
 package com.app.todocompose.domain.project
 
+import androidx.compose.ui.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -7,5 +8,6 @@ import androidx.room.PrimaryKey
 data class Project(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val name: String
+    val name: String,
+    val color: Int
 )

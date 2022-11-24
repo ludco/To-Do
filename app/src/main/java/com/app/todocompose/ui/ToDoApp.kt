@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.app.todocompose.R
@@ -34,7 +35,6 @@ fun ToDoApp(taskViewModel: TaskViewModel, projectViewModel: ProjectViewModel) {
     var showDialog by remember { mutableStateOf(false) }
     var projectMode by remember { mutableStateOf(false) }
 
-    val tasksList by taskViewModel.tasks.collectAsState(initial = listOf())
     val projectsList by projectViewModel.projects.collectAsState(initial = listOf())
 
     fun addNewTask(taskName: String, projectId: Long) {
@@ -43,8 +43,8 @@ fun ToDoApp(taskViewModel: TaskViewModel, projectViewModel: ProjectViewModel) {
         showDialog = false
     }
 
-    fun projectNewTask(projectName: String) {
-        val project = Project(name = projectName)
+    fun projectNewTask(projectName: String, projectColor: Color) {
+        val project = Project(name = projectName, color = projectColor.toArgb())
         projectViewModel.addProject(project)
     }
 
@@ -66,13 +66,18 @@ fun ToDoApp(taskViewModel: TaskViewModel, projectViewModel: ProjectViewModel) {
             AddTaskDialog(
                 onOKClick = { taskName, project -> addNewTask(taskName, project.id) },
                 onCancelClick = { showDialog = false },
-                onProjectCreated = { projectName -> projectNewTask(projectName) },
+                onProjectCreated = { projectName, projectColor ->
+                    projectNewTask(
+                        projectName,
+                        projectColor
+                    )
+                },
                 projectsList = projectsList
             )
 
         }
         HomeScreen(
-            tasksList,
+            taskViewModel.taskUiState,
             projectsList,
             projectMode,
             onDeleteTask = { taskId -> deleteTask(taskId) })

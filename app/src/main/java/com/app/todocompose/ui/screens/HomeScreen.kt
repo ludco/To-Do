@@ -1,20 +1,21 @@
 package com.app.todocompose.ui.screens
 
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.app.todocompose.R
@@ -22,11 +23,28 @@ import com.app.todocompose.domain.project.Project
 import com.app.todocompose.domain.task.Task
 import com.app.todocompose.ui.components.ProjectItem
 import com.app.todocompose.ui.components.TaskItem
+import com.app.todocompose.ui.viewmodels.TaskUiState
 
 @Composable
 fun HomeScreen(
-    tasksList: List<Task>,
+    taskUiState: TaskUiState,
     projectList: List<Project>,
+    projectMode: Boolean,
+    onDeleteTask: (Long) -> Unit
+) {
+    when (taskUiState) {
+        is TaskUiState.Success -> {
+            val tasksList by taskUiState.tasks.collectAsState(initial = listOf())
+            return TaskScreen(tasksList, projectList, projectMode, onDeleteTask)
+        }
+        is TaskUiState.Loading -> LoadingScreen()
+        is TaskUiState.Error -> ErrorScreen()
+    }
+}
+
+@Composable
+fun TaskScreen(
+    tasksList: List<Task>, projectList: List<Project>,
     projectMode: Boolean,
     onDeleteTask: (Long) -> Unit
 ) {
@@ -34,6 +52,20 @@ fun HomeScreen(
         AllDoneScreen()
     } else {
         TasksListScreen(tasksList, projectList, onDeleteTask, projectMode)
+    }
+}
+
+@Composable
+fun LoadingScreen(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(modifier.testTag("amphibians-loader"))
+    }
+}
+
+@Composable
+fun ErrorScreen(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(stringResource(R.string.whoops))
     }
 }
 
@@ -47,7 +79,7 @@ fun TasksListScreen(
 ) {
     if (projectMode) {
         LazyColumn(modifier = modifier) {
-            items(projectList, key = { project -> project.id }) {project->
+            items(projectList, key = { project -> project.id }) { project ->
                 ProjectItem(project, tasksList, onDeleteTask)
             }
         }
@@ -62,7 +94,6 @@ fun TasksListScreen(
 
 @Composable
 fun AllDoneScreen() {
-
     Column(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
