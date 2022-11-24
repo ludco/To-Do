@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.app.todocompose.R
@@ -29,7 +30,10 @@ fun TaskItem(task: Task, onDeleteTask: (Long) -> Unit, modifier: Modifier = Modi
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = task.name)
-        IconButton(onClick = { onDeleteTask(task.id) }) {
+        IconButton(
+            onClick = { onDeleteTask(task.id) },
+            modifier.testTag("test-delete-button-${task.id}")
+        ) {
             Icon(
                 imageVector = Icons.Filled.Delete,
                 contentDescription = stringResource(R.string.delete)

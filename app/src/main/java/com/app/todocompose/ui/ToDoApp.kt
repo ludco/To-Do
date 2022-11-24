@@ -27,11 +27,10 @@ fun ToDoAppBarr() {
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun ToDoApp(taskViewModel: TaskViewModel = viewModel()) {
+fun ToDoApp(taskViewModel: TaskViewModel) {
     var showDialog by remember { mutableStateOf(false) }
 
     val tasksList by taskViewModel.tasks.collectAsState(initial = listOf())
-    Log.d("TEST", tasksList.toString())
 
     fun addNewTask(taskName: String) {
         val task = Task(name = taskName)

@@ -2,6 +2,8 @@ package com.app.todocompose.ui
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.app.todocompose.fake.FakeLocalTaskRepository
+import com.app.todocompose.ui.viewmodels.TaskViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -13,7 +15,8 @@ class ToDoAppTest {
     @Before
     fun setupFormScreen() {
         composeTestRule.setContent {
-            ToDoApp()
+            val taskViewModel = TaskViewModel(taskRepository = FakeLocalTaskRepository())
+            ToDoApp(taskViewModel)
         }
     }
 
@@ -29,13 +32,13 @@ class ToDoAppTest {
     }
 
     @Test
-    fun homeScreen_taskListContainOneTask_showTasksListScreen() {
+    fun homeScreen_taskListContainOneTask_showTasksListScreen()  {
         addTaskToTasksList()
         composeTestRule.onNodeWithText("Do something").assertIsDisplayed()
     }
 
     @Test
-    fun homeScreen_removeTheOneTaskFromTasksList_showAllDoneScreen() {
+    fun homeScreen_removeTheOneTaskFromTasksList_showAllDoneScreen()  {
         addTaskToTasksList()
         composeTestRule.onNodeWithContentDescription("Delete").performClick()
         composeTestRule.onNodeWithText("All done !").assertIsDisplayed()

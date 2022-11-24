@@ -37,7 +37,7 @@ fun TasksListScreen(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
-        items(tasksList) { task ->
+        items(tasksList, key = { task -> task.id }) { task ->
             TaskItem(task, onDeleteTask)
         }
     }

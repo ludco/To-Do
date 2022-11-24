@@ -1,29 +1,28 @@
 package com.app.todocompose.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.app.todocompose.MainApplication
-import com.app.todocompose.data.AppDatabase
-import com.app.todocompose.data.repository.LocalTaskRepository
+import com.app.todocompose.data.repository.TaskRepository
 import com.app.todocompose.domain.task.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 
-class TaskViewModel() : ViewModel() {
-    private val application = MainApplication.instance
+
+class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
+
     private lateinit var _tasks: Flow<List<Task>>
     val tasks: Flow<List<Task>>
         get() = _tasks
 
-    private val taskRepository: LocalTaskRepository
 
     init {
-        val db = AppDatabase.getInstance(application)
-        val taskDao = db.getTaskDao()
-        taskRepository = LocalTaskRepository(taskDao)
-
         getTasks()
     }
 
@@ -54,6 +53,16 @@ class TaskViewModel() : ViewModel() {
                 taskRepository.deleteTask(taskId)
             } catch (e: IOException) {
                 //TODO
+            }
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as MainApplication)
+                val taskRepository = application.container.taskRepository
+                TaskViewModel(taskRepository = taskRepository)
             }
         }
     }
