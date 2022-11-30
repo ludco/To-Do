@@ -2,10 +2,12 @@ package com.app.todocompose.ui
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.app.todocompose.domain.project.Project
 import com.app.todocompose.fake.FakeLocalProjectRepository
 import com.app.todocompose.fake.FakeLocalTaskRepository
 import com.app.todocompose.ui.viewmodels.ProjectViewModel
 import com.app.todocompose.ui.viewmodels.TaskViewModel
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,7 +20,8 @@ class ToDoAppTest {
     fun setupFormScreen() {
         composeTestRule.setContent {
             val taskViewModel = TaskViewModel(taskRepository = FakeLocalTaskRepository())
-            val projectViewModel = ProjectViewModel(projectRepository = FakeLocalProjectRepository())
+            val projectViewModel =
+                ProjectViewModel(projectRepository = FakeLocalProjectRepository())
             ToDoApp(taskViewModel, projectViewModel)
         }
     }
@@ -35,13 +38,13 @@ class ToDoAppTest {
     }
 
     @Test
-    fun homeScreen_taskListContainOneTask_showTasksListScreen()  {
+    fun homeScreen_taskListContainOneTask_showTasksListScreen() {
         addTaskToTasksList()
         composeTestRule.onNodeWithText("Do something").assertIsDisplayed()
     }
 
     @Test
-    fun homeScreen_removeTheOneTaskFromTasksList_showAllDoneScreen()  {
+    fun homeScreen_removeTheOneTaskFromTasksList_showAllDoneScreen() {
         addTaskToTasksList()
         composeTestRule.onNodeWithContentDescription("Delete").performClick()
         composeTestRule.onNodeWithText("All done !").assertIsDisplayed()
@@ -49,6 +52,8 @@ class ToDoAppTest {
 
     private fun addTaskToTasksList() {
         composeTestRule.onNodeWithTag("test-FAB").performClick()
+        composeTestRule.onNodeWithText("Project").performClick()
+        composeTestRule.onNodeWithText("Project Test").performClick()
         composeTestRule.onNodeWithText("Task name").performTextInput("Do something")
         composeTestRule.onNodeWithText("OK").performClick()
 

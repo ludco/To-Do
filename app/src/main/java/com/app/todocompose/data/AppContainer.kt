@@ -1,6 +1,5 @@
 package com.app.todocompose.data
 
-import androidx.room.Room
 import com.app.todocompose.MainApplication
 import com.app.todocompose.data.repository.LocalProjectRepository
 import com.app.todocompose.data.repository.LocalTaskRepository

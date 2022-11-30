@@ -1,5 +1,7 @@
 package com.app.todocompose.ui.viewmodels
 
+import android.database.sqlite.SQLiteException
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,8 +16,8 @@ import com.app.todocompose.data.repository.TaskRepository
 import com.app.todocompose.domain.task.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import java.io.IOException
 
+const val TASK = "TASK"
 
 sealed interface TaskUiState {
     data class Success(val tasks: Flow<List<Task>>) : TaskUiState
@@ -26,7 +28,7 @@ sealed interface TaskUiState {
 class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
     var taskUiState: TaskUiState by mutableStateOf(TaskUiState.Loading)
         private set
-
+    var errorMessage by mutableStateOf("")
 
     init {
         getTasks()
@@ -34,11 +36,12 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
 
     private fun getTasks() {
         viewModelScope.launch {
-            try {
+            taskUiState = try {
                 val result = taskRepository.getTasks()
-                taskUiState = TaskUiState.Success(result)
-            } catch (e: IOException) {
-                taskUiState = TaskUiState.Error
+                TaskUiState.Success(result)
+            } catch (e: SQLiteException) {
+                Log.e(TASK, e.toString())
+                TaskUiState.Error
             }
         }
     }
@@ -47,8 +50,10 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 taskRepository.addTask(task)
-            } catch (e: IOException) {
-                taskUiState = TaskUiState.Error
+            } catch (e: SQLiteException) {
+                Log.e(TASK, e.toString())
+                errorMessage = "An error occurred while adding task"
+
             }
         }
     }
@@ -57,8 +62,9 @@ class TaskViewModel(private val taskRepository: TaskRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 taskRepository.deleteTask(taskId)
-            } catch (e: IOException) {
-                taskUiState = TaskUiState.Error
+            } catch (e: SQLiteException) {
+                Log.e(TASK, e.toString())
+                errorMessage = "An error occurred while deleting the task"
             }
         }
     }

@@ -1,8 +1,10 @@
 package com.app.todocompose.fake
 
 
+import androidx.compose.ui.graphics.toArgb
 import com.app.todocompose.domain.project.Project
 import com.app.todocompose.domain.task.Task
+import com.app.todocompose.ui.theme.Teal200
 import kotlinx.coroutines.flow.*
 
 object FakeDataSource {
@@ -18,5 +20,5 @@ object FakeDataSource {
         }
 
     var projectList =
-        flow { emit(listOf(Project(id = 1, name = "Project"))) }
+        flow { emit(listOf(Project(id = 1, name = "Project", color = Teal200.toArgb()))) }
 }

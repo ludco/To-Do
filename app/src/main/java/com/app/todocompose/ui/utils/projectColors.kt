@@ -1,7 +1,7 @@
-package com.app.todocompose.domain.project
+package com.app.todocompose.ui.utils
 
-import androidx.compose.ui.graphics.Color
+import com.app.todocompose.ui.theme.*
 
 object ProjectColors {
-    val colors = listOf<Color>(Color.Yellow, Color.Red, Color.Blue, Color.Magenta, Color.Green)
+    val colors = listOf(Purple200, Purple500, Purple700, Teal200, Teal300)
 }

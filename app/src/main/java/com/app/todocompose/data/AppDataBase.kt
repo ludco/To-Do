@@ -9,7 +9,7 @@ import com.app.todocompose.data.dao.TaskDao
 import com.app.todocompose.domain.project.Project
 import com.app.todocompose.domain.task.Task
 
-@Database(entities = [Task::class, Project::class], version = 4, exportSchema = false)
+@Database(entities = [Task::class, Project::class], version = 5, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getTaskDao(): TaskDao
     abstract fun getProjectDao(): ProjectDao

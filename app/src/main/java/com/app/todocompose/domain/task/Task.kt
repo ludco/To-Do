@@ -1,9 +1,6 @@
 package com.app.todocompose.domain.task
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.app.todocompose.domain.project.Project
 
 @Entity(
@@ -11,7 +8,8 @@ import com.app.todocompose.domain.project.Project
         entity = Project::class,
         parentColumns = ["id"],
         childColumns = ["projectId"]
-    )]
+    )],
+    indices = [Index(value = arrayOf("name"), unique = true)],
 )
 data class Task(
     @PrimaryKey(autoGenerate = true)

@@ -30,12 +30,19 @@ fun HomeScreen(
     taskUiState: TaskUiState,
     projectList: List<Project>,
     projectMode: Boolean,
-    onDeleteTask: (Long) -> Unit
+    onDeleteTask: (Long) -> Unit,
+    openModifyProjectDialog: (Long) -> Unit,
 ) {
     when (taskUiState) {
         is TaskUiState.Success -> {
             val tasksList by taskUiState.tasks.collectAsState(initial = listOf())
-            return TaskScreen(tasksList, projectList, projectMode, onDeleteTask)
+            return TaskScreen(
+                tasksList,
+                projectList,
+                projectMode,
+                onDeleteTask,
+                openModifyProjectDialog,
+            )
         }
         is TaskUiState.Loading -> LoadingScreen()
         is TaskUiState.Error -> ErrorScreen()
@@ -46,12 +53,13 @@ fun HomeScreen(
 fun TaskScreen(
     tasksList: List<Task>, projectList: List<Project>,
     projectMode: Boolean,
-    onDeleteTask: (Long) -> Unit
+    onDeleteTask: (Long) -> Unit,
+    openModifyProjectDialog: (Long) -> Unit,
 ) {
     if (tasksList.isEmpty()) {
         AllDoneScreen()
     } else {
-        TasksListScreen(tasksList, projectList, onDeleteTask, projectMode)
+        TasksListScreen(tasksList, projectList, onDeleteTask, openModifyProjectDialog, projectMode)
     }
 }
 
@@ -74,13 +82,14 @@ fun TasksListScreen(
     tasksList: List<Task>,
     projectList: List<Project>,
     onDeleteTask: (Long) -> Unit,
+    openModifyProjectDialog: (Long) -> Unit,
     projectMode: Boolean,
     modifier: Modifier = Modifier
 ) {
     if (projectMode) {
         LazyColumn(modifier = modifier) {
             items(projectList, key = { project -> project.id }) { project ->
-                ProjectItem(project, tasksList, onDeleteTask)
+                ProjectItem(project, tasksList, onDeleteTask, openModifyProjectDialog)
             }
         }
     } else {

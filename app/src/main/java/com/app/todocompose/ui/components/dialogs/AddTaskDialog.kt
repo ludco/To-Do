@@ -1,8 +1,9 @@
-package com.app.todocompose.ui.components
+package com.app.todocompose.ui.components.dialogs
 
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -13,10 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.app.todocompose.R
 import com.app.todocompose.domain.project.Project
+import com.app.todocompose.ui.components.OutlineDropDown
+import com.app.todocompose.ui.components.TransparentButton
 
 @Composable
 fun AddTaskDialog(
@@ -27,9 +31,9 @@ fun AddTaskDialog(
     modifier: Modifier = Modifier,
 
     ) {
-    var showProjectDialaog by remember { mutableStateOf(false) }
+    var showProjectDialog by remember { mutableStateOf(false) }
     var taskName by remember { mutableStateOf("") }
-    var selectedProject by remember { mutableStateOf(Project(id = 0, name = "", color= 0)) }
+    var selectedProject by remember { mutableStateOf(Project(id = 0, name = "", color = 0)) }
     val context = LocalContext.current
 
 
@@ -41,7 +45,7 @@ fun AddTaskDialog(
                     selectedProject = selectedProject,
                     projectList = projectsList,
                     onChooseItem = { item -> selectedProject = item },
-                    onCreateNewProject = { showProjectDialaog = true },
+                    onCreateNewProject = { showProjectDialog = true },
                     modifier = Modifier
                 )
                 OutlinedTextField(
@@ -49,6 +53,9 @@ fun AddTaskDialog(
                     onValueChange = { value -> taskName = value },
                     label = { Text(stringResource(R.string.task_name)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text
+                    ),
                     leadingIcon = {
                         Icon(
                             Icons.Filled.Edit,
@@ -65,7 +72,15 @@ fun AddTaskDialog(
                         label = R.string.button_ok,
                         onClick = {
                             if (selectedProject.name.isNotEmpty()) {
-                                onOKClick(taskName, selectedProject!!)
+                                if (taskName.isNotEmpty()) {
+                                    onOKClick(taskName, selectedProject)
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Please enter a task name !",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
                             } else {
                                 Toast.makeText(
                                     context,
@@ -78,13 +93,15 @@ fun AddTaskDialog(
             }
         }
     }
-    if (showProjectDialaog) {
-        AddProjectDialog(
-            onOKClick = { projectname, projectColor ->
-                onProjectCreated(projectname, projectColor);
-                showProjectDialaog = false
+    if (showProjectDialog) {
+        BaseProjectDialog(
+            onOKClick = { projectName, projectColor, _ ->
+                onProjectCreated(projectName, projectColor)
+                showProjectDialog = false
             },
-            onCancelClick = { showProjectDialaog = false })
+            onCancelClick = { showProjectDialog = false },
+            editMode = false
+        )
     }
 }
 

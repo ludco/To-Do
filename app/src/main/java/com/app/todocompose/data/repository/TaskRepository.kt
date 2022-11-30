@@ -10,6 +10,8 @@ interface TaskRepository {
     suspend fun addTask(task: Task)
 
     suspend fun deleteTask(taskId: Long)
+
+    suspend fun deleteAssociatedTasks(projectId: Long)
 }
 
 class LocalTaskRepository(private val taskDao: TaskDao) : TaskRepository {
@@ -23,5 +25,9 @@ class LocalTaskRepository(private val taskDao: TaskDao) : TaskRepository {
 
     override suspend fun deleteTask(taskId: Long) {
         taskDao.delete(taskId)
+    }
+
+    override suspend fun deleteAssociatedTasks(projectId: Long) {
+        taskDao.deleteAssociatedTasks(projectId)
     }
 }

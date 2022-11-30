@@ -2,6 +2,7 @@ package com.app.todocompose.ui.components
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -20,6 +21,7 @@ fun ProjectItem(
     project: Project,
     tasksList: List<Task>,
     onDeleteTask: (Long) -> Unit,
+    openModifyProjectDialog: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -29,7 +31,10 @@ fun ProjectItem(
                 horizontal = 15.dp, vertical = 8.dp
             ),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable(onClick = { openModifyProjectDialog(project.id) })
+        ) {
             Box(
                 modifier = Modifier
                     .clip(shape = RoundedCornerShape(20.dp))

@@ -9,6 +9,8 @@ interface ProjectRepository {
 
     suspend fun addProject(project: Project)
 
+    suspend fun editProject(projectId: Long, projectName: String, projectColor: Int)
+
     suspend fun deleteProject(projectId: Long)
 }
 
@@ -19,6 +21,10 @@ class LocalProjectRepository(private val projectDao: ProjectDao) : ProjectReposi
 
     override suspend fun addProject(project: Project) {
         projectDao.insert(project)
+    }
+
+    override suspend fun editProject(projectId: Long, projectName: String, projectColor: Int) {
+        projectDao.update(projectId, projectName, projectColor)
     }
 
     override suspend fun deleteProject(projectId: Long) {

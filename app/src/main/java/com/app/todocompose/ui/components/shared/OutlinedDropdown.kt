@@ -27,8 +27,8 @@ fun OutlineDropDown(
 
     var expanded by remember { mutableStateOf(false) }
 
-    Row(Modifier.fillMaxWidth()) {
-        Box() {
+    Row() {
+        Box(  modifier = Modifier.width(IntrinsicSize.Max) ) {
             OutlinedTextField(
                 value = selectedProject.name,
                 onValueChange = { },
@@ -49,12 +49,19 @@ fun OutlineDropDown(
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
+                modifier = Modifier.width(IntrinsicSize.Max)
             ) {
                 projectList.forEachIndexed { index, item ->
                     DropdownMenuItem(onClick = {
                         onChooseItem(item)
                         expanded = false
-                    }) { Text(text = item.name, style = MaterialTheme.typography.caption) }
+                    }) {
+                        Text(
+                            text = item.name,
+                            style = MaterialTheme.typography.caption,
+
+                            )
+                    }
                 }
                 Spacer(
                     modifier = Modifier
