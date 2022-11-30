@@ -12,7 +12,7 @@
     <string name="delete">Delete</string>
     <string name="create_project">Create a new project</string>
     <string name="modify_project">Modify the project</string>
-    <string name="todo">ToDo</string>
+    <string name="todo">To Do</string>
     <string name="whoops">Whoops... we were unable to get your tasks list</string>
     <string name="warning_message">Delete project and all associated tasks ?</string>
 </resources>
