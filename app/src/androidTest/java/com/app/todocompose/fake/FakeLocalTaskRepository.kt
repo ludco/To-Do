@@ -13,6 +13,10 @@ class FakeLocalTaskRepository : TaskRepository {
         FakeDataSource.addTask(task)
     }
 
+    override suspend fun deleteAssociatedTasks(projectId: Long) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun deleteTask(taskId: Long) {
         FakeDataSource.removeTask(taskId)
     }

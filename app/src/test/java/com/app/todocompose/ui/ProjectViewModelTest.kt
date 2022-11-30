@@ -17,7 +17,10 @@ class ProjectViewModelTest {
 
     @Test
     fun taskViewModel_getProjects_checkSuccess() = runTest {
-        val projectViewModel = ProjectViewModel(projectRepository = FakeLocalProjectRepository())
+        val projectViewModel = ProjectViewModel(
+            projectRepository = FakeLocalProjectRepository(),
+            taskRepository = FakeLocalTaskRepository()
+        )
         Assert.assertEquals(
             projectViewModel.projects,
             FakeDataSource.projectList
