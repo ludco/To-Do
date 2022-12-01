@@ -1,6 +1,7 @@
 package com.app.todocompose.ui.screens
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,6 +24,7 @@ import com.app.todocompose.domain.project.Project
 import com.app.todocompose.domain.task.Task
 import com.app.todocompose.ui.components.ProjectItem
 import com.app.todocompose.ui.components.TaskItem
+import com.app.todocompose.ui.viewmodels.TASK
 import com.app.todocompose.ui.viewmodels.TaskUiState
 
 @Composable
@@ -36,6 +38,7 @@ fun HomeScreen(
     when (taskUiState) {
         is TaskUiState.Success -> {
             val tasksList by taskUiState.tasks.collectAsState(initial = listOf())
+            Log.d(TASK, tasksList.toString())
             return TaskScreen(
                 tasksList,
                 projectList,

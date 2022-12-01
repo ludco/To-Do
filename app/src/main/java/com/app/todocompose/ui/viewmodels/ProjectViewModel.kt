@@ -13,7 +13,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.app.todocompose.MainApplication
 import com.app.todocompose.data.repository.ProjectRepository
-import com.app.todocompose.data.repository.TaskRepository
 import com.app.todocompose.domain.project.Project
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -22,7 +21,6 @@ const val PROJECT = "PROJECT"
 
 class ProjectViewModel(
     private val projectRepository: ProjectRepository,
-    private val taskRepository: TaskRepository
 ) : ViewModel() {
     private lateinit var _projects: Flow<List<Project>>
     val projects: Flow<List<Project>>
@@ -72,7 +70,6 @@ class ProjectViewModel(
     fun deleteProject(projectId: Long) {
         viewModelScope.launch {
             try {
-                taskRepository.deleteAssociatedTasks(projectId)
                 projectRepository.deleteProject(projectId)
             } catch (e: SQLiteException) {
                 Log.e(PROJECT, e.toString())
@@ -86,10 +83,8 @@ class ProjectViewModel(
             initializer {
                 val application = (this[APPLICATION_KEY] as MainApplication)
                 val projectRepository = application.container.projectRepository
-                val taskRepository = application.container.taskRepository
                 ProjectViewModel(
                     projectRepository = projectRepository,
-                    taskRepository = taskRepository
                 )
             }
         }

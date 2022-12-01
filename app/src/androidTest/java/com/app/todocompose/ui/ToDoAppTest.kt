@@ -21,7 +21,7 @@ class ToDoAppTest {
         composeTestRule.setContent {
             val taskViewModel = TaskViewModel(taskRepository = FakeLocalTaskRepository())
             val projectViewModel =
-                ProjectViewModel(projectRepository = FakeLocalProjectRepository(), taskRepository = FakeLocalTaskRepository())
+                ProjectViewModel(projectRepository = FakeLocalProjectRepository())
             ToDoApp(taskViewModel, projectViewModel)
         }
     }
